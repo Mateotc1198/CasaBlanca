@@ -1,0 +1,50 @@
+﻿@model List<CasaBlanca.Models.Hotel>
+
+@{
+    ViewBag.Title = "Hoteles";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container py-5">
+    <div class="page-shell p-4 p-md-5">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold page-title-light">Nuestros hoteles</h2>
+            <p class="page-text-light mb-0">
+                Descubre nuestras opciones disponibles y reserva tu estancia ideal.
+            </p>
+        </div>
+
+        <div class="row g-4">
+            @if (Model != null && Model.Count > 0)
+            {
+                foreach (var h in Model)
+                {
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card h-100 border-0 shadow rounded-4 overflow-hidden">
+                            <img src="~/Content/Imagenes/@h.Imagen" class="card-img-top" style="height: 240px; object-fit: cover;" alt="@h.Nombre" />
+
+                            <div class="card-body p-4">
+                                <h5 class="fw-bold mb-2">@h.Nombre</h5>
+                                <p class="text-muted mb-2">@h.Ciudad</p>
+                                <p class="mb-2"><strong>Precio por noche:</strong> $@h.PrecioPorNoche.ToString("N2")</p>
+                                <p class="mb-3"><strong>Capacidad máxima:</strong> @h.CapacidadMaxima personas</p>
+
+                                <a href="/Reserva/Nueva?idHotel=@h.IdHotel" class="btn btn-primary w-100">
+                                    Reservar
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="col-12">
+                    <div class="alert alert-info text-center">
+                        No hay hoteles disponibles en este momento.
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

@@ -1,0 +1,33 @@
+﻿@{
+    ViewBag.Title = "Nosotros";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container py-5">
+    <div class="page-shell p-4 p-md-5 text-center">
+        <h1 class="fw-bold mb-4 text-white">Quiénes Somos</h1>
+
+        <p class="lead text-white">
+            Agencia de Hoteles Casa Blanca nace con la misión de conectar a los viajeros con los mejores destinos y experiencias de hospedaje.
+        </p>
+
+        <p class="text-white">
+            Desde nuestros inicios, nos hemos comprometido a ofrecer un servicio personalizado y una selección de hoteles que cumplen
+            con los más altos estándares de calidad. Creemos que cada viaje debe ser memorable, por eso trabajamos con pasión
+            para ayudarte a encontrar el lugar perfecto.
+        </p>
+
+        <p class="text-white">
+            Nuestro equipo está formado por profesionales del turismo con amplia experiencia en el sector, listos para acompañarte
+            en cada paso de tu reserva.
+        </p>
+
+        <p class="mt-4">
+            <a href="@Url.Action("Index", "Home")" class="btn btn-primary">Volver al Inicio</a>
+        </p>
+
+        <div class="mt-4">
+            <img src="~/Content/Imagenes/logo.jpg" alt="Equipo de trabajo" class="img-fluid shadow rounded" style="max-width: 420px;" />
+        </div>
+    </div>
+</div>

@@ -1,0 +1,576 @@
+﻿@using CasaBlanca.Models
+
+@{
+    ViewBag.Title = "Inicio | Agencia de Hoteles Casa Blanca";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var hoteles = ViewBag.Hoteles as List<Hotel>;
+}
+
+
+<style>
+    .home-page {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        background-color: #f8fafc;
+    }
+
+    .hero-section {
+        position: relative;
+        min-height: 94vh;
+        background-image: url('@Url.Content("~/Content/Imagenes/hotel1.jpg")');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        display: flex;
+        align-items: center;
+    }
+
+    .hero-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to right, rgba(2, 6, 23, 0.82), rgba(2, 6, 23, 0.30));
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 2;
+        color: white;
+        max-width: 720px;
+        padding: 70px 0 170px;
+    }
+
+    .hero-content h1 {
+        font-size: 4rem;
+        font-weight: 800;
+        line-height: 1.08;
+        margin-bottom: 20px;
+    }
+
+    .hero-content p {
+        font-size: 1.12rem;
+        color: rgba(255,255,255,0.92);
+        margin-bottom: 28px;
+        max-width: 620px;
+    }
+
+    .hero-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 28px;
+    }
+
+    .hero-badge-item {
+        background: rgba(255,255,255,0.12);
+        border: 1px solid rgba(255,255,255,0.18);
+        color: white;
+        padding: 10px 16px;
+        border-radius: 999px;
+        font-size: 0.95rem;
+        backdrop-filter: blur(6px);
+    }
+
+    .booking-box {
+        position: relative;
+        z-index: 5;
+        margin-top: -85px;
+    }
+
+    .booking-card {
+        background: rgba(255,255,255,0.96);
+        border-radius: 26px;
+        box-shadow: 0 20px 50px rgba(15, 23, 42, 0.16);
+        padding: 28px;
+    }
+
+    .booking-top-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #0f172a;
+        margin-bottom: 18px;
+    }
+
+    .booking-card .form-label {
+        font-weight: 600;
+        color: #334155;
+        margin-bottom: 8px;
+    }
+
+    .booking-card .form-control,
+    .booking-card .form-select {
+        border-radius: 14px;
+        min-height: 54px;
+    }
+
+    .stats-strip {
+        padding: 35px 0 20px;
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: 20px;
+        padding: 24px;
+        text-align: center;
+        box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+        height: 100%;
+    }
+
+    .stat-number {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #0d6efd;
+        line-height: 1;
+        margin-bottom: 10px;
+    }
+
+    .stat-text {
+        color: #64748b;
+        margin: 0;
+    }
+
+    .section-space {
+        padding: 80px 0;
+    }
+
+    .section-title {
+        text-align: center;
+        margin-bottom: 46px;
+    }
+
+    .section-title h2 {
+        font-size: 2.35rem;
+        font-weight: 800;
+        color: #0f172a;
+        margin-bottom: 10px;
+    }
+
+    .section-title p {
+        color: #64748b;
+        margin: 0;
+    }
+
+    .category-card {
+        position: relative;
+        border-radius: 24px;
+        overflow: hidden;
+        min-height: 320px;
+        box-shadow: 0 14px 32px rgba(15, 23, 42, 0.10);
+    }
+
+    .category-card img {
+        width: 100%;
+        height: 320px;
+        object-fit: cover;
+    }
+
+    .category-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(15,23,42,0.82), rgba(15,23,42,0.15));
+        display: flex;
+        align-items: end;
+        padding: 24px;
+    }
+
+    .category-overlay h4,
+    .category-overlay p {
+        color: white;
+        margin: 0;
+    }
+
+    .category-overlay p {
+        margin-top: 8px;
+        color: rgba(255,255,255,0.88);
+    }
+
+    .hotel-card {
+        border: none;
+        border-radius: 22px;
+        overflow: hidden;
+        background: white;
+        box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        height: 100%;
+    }
+
+    .hotel-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 18px 36px rgba(15, 23, 42, 0.14);
+    }
+
+    .hotel-card img {
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+    }
+
+    .hotel-card .card-body {
+        padding: 24px;
+    }
+
+    .hotel-location {
+        font-size: 0.92rem;
+        color: #0d6efd;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .hotel-price {
+        font-size: 1rem;
+        font-weight: 800;
+        color: #0f172a;
+    }
+
+    .benefit-card {
+        background: white;
+        border-radius: 20px;
+        padding: 30px 24px;
+        height: 100%;
+        box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+        text-align: center;
+    }
+
+    .benefit-icon {
+        width: 68px;
+        height: 68px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #dbeafe, #e0f2fe);
+        color: #0d6efd;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4rem;
+        font-weight: 800;
+        margin: 0 auto 18px;
+    }
+
+    .promo-section {
+        background: linear-gradient(135deg, #0d6efd, #1d4ed8);
+        color: white;
+        border-radius: 28px;
+        padding: 50px 40px;
+        box-shadow: 0 18px 38px rgba(29, 78, 216, 0.22);
+    }
+
+    .promo-section h2 {
+        font-weight: 800;
+        margin-bottom: 15px;
+    }
+
+    .promo-section p {
+        color: rgba(255,255,255,0.92);
+        margin-bottom: 0;
+    }
+
+    @@media (max-width: 991px) {
+        .hero-content {
+            padding: 50px 0 140px;
+        }
+
+        .hero-content h1 {
+            font-size: 2.9rem;
+        }
+    }
+
+    @@media (max-width: 768px) {
+        .hero-section {
+            min-height: auto;
+        }
+
+        .hero-content {
+            padding: 40px 0 120px;
+        }
+
+        .hero-content h1 {
+            font-size: 2.2rem;
+        }
+
+        .booking-box {
+            margin-top: -45px;
+        }
+
+        .booking-card {
+            padding: 20px;
+        }
+
+        .promo-section {
+            padding: 34px 24px;
+        }
+    }
+</style>
+
+<div class="home-page">
+
+    <section class="hero-section">
+        <div class="hero-overlay"></div>
+
+        <div class="container">
+            <div class="hero-content">
+                <span class="badge bg-light text-primary px-3 py-2 mb-3">Hoteles premium y reservas rápidas</span>
+                <h1>Encuentra el hotel perfecto para cada tipo de viaje</h1>
+                <p>
+                    Descubre destinos exclusivos, compara opciones y reserva estancias memorables
+                    con una experiencia moderna, cómoda y segura.
+                </p>
+
+                <div class="d-flex flex-wrap gap-3">
+                    <a href="/Reserva/Nueva" class="btn btn-primary btn-lg px-4">Reservar ahora</a>
+                    <a href="/Home/Nosotros" class="btn btn-outline-light btn-lg px-4">Conócenos</a>
+                </div>
+
+                <div class="hero-badges">
+                    <div class="hero-badge-item">+120 hoteles</div>
+                    <div class="hero-badge-item">Reserva segura</div>
+                    <div class="hero-badge-item">Atención personalizada</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container booking-box">
+        <div class="booking-card">
+            <div class="booking-top-title">Busca tu próxima estancia</div>
+
+            <form action="/Reserva/Nueva" method="get">
+                <div class="row g-3 align-items-end">
+                    <div class="col-lg-3 col-md-6">
+                        <label class="form-label">Hotel</label>
+                        <select name="idHotel" class="form-select form-select-lg">
+                            <option value="">Seleccione un hotel</option>
+                            @if (hoteles != null)
+                            {
+                                foreach (var h in hoteles)
+                                {
+                                    <option value="@h.IdHotel">
+                                        @h.Nombre - @h.Ciudad
+                                    </option>
+                                }
+                            }
+                        </select>
+                    </div>
+
+                    <div class="col-lg-2 col-md-6">
+                        <label class="form-label">Entrada</label>
+                        <input type="date" name="entrada" class="form-control form-control-lg">
+                    </div>
+
+                    <div class="col-lg-2 col-md-6">
+                        <label class="form-label">Salida</label>
+                        <input type="date" name="salida" class="form-control form-control-lg">
+                    </div>
+
+                    <div class="col-lg-2 col-md-6">
+                        <label class="form-label">Huéspedes</label>
+                        <select name="huespedes" class="form-select form-select-lg">
+                            <option value="1">1 persona</option>
+                            <option value="2">2 personas</option>
+                            <option value="3">3 personas</option>
+                            <option value="4">4 personas</option>
+                        </select>
+                    </div>
+
+                    <div class="col-lg-3 col-md-12">
+                        <button type="submit" class="btn btn-primary btn-lg w-100">
+                            Buscar disponibilidad
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <section class="stats-strip">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="stat-card">
+                        <div class="stat-number">120+</div>
+                        <p class="stat-text">Hoteles y alojamientos seleccionados</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stat-card">
+                        <div class="stat-number">24/7</div>
+                        <p class="stat-text">Atención para ayudarte en tu reserva</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stat-card">
+                        <div class="stat-number">98%</div>
+                        <p class="stat-text">Clientes satisfechos con su experiencia</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-space">
+        <div class="container">
+            <div class="section-title">
+                <h2>Explora por experiencia</h2>
+                <p>Encuentra el tipo de hospedaje ideal según tu estilo de viaje.</p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="category-card">
+                        <img src="~/Content/Imagenes/hotel3.jpg" alt="Escapadas de playa">
+                        <div class="category-overlay">
+                            <div>
+                                <h4>Escapadas de playa</h4>
+                                <p>Relájate frente al mar con vistas inolvidables y servicios premium.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="category-card">
+                        <img src="~/Content/Imagenes/hotel2.jpg" alt="Viajes urbanos">
+                        <div class="category-overlay">
+                            <div>
+                                <h4>Viajes urbanos</h4>
+                                <p>Hospédate cerca de zonas empresariales, gastronómicas y culturales.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="category-card">
+                        <img src="~/Content/Imagenes/hotel1.jpg" alt="Vacaciones premium">
+                        <div class="category-overlay">
+                            <div>
+                                <h4>Vacaciones premium</h4>
+                                <p>Disfruta resorts exclusivos, comodidad total y una atención destacada.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-space pt-0">
+        <div class="container">
+            <div class="section-title">
+                <h2>Destinos destacados</h2>
+                <p>Descubre algunos de nuestros hoteles más atractivos para tu próxima estancia.</p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="hotel-card">
+                        <img src="~/Content/Imagenes/hotel1.jpg" alt="Hotel Casa Blanca Resort">
+                        <div class="card-body">
+                            <div class="hotel-location">Punta Cana, República Dominicana</div>
+                            <h5 class="fw-bold">Casa Blanca Resort & Spa</h5>
+                            <p class="text-muted">
+                                Disfruta una experiencia tropical con piscina, restaurante y habitaciones de lujo.
+                            </p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="hotel-price">Desde $120 / noche</span>
+                                <a href="/Reserva/Nueva" class="btn btn-outline-primary">Reservar</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="hotel-card">
+                        <img src="~/Content/Imagenes/hotel2.jpg" alt="Hotel urbano premium">
+                        <div class="card-body">
+                            <div class="hotel-location">Bogotá, Colombia</div>
+                            <h5 class="fw-bold">Urban Grand Hotel</h5>
+                            <p class="text-muted">
+                                Ideal para viajes de negocios o escapadas de fin de semana con máxima comodidad.
+                            </p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="hotel-price">Desde $95 / noche</span>
+                                <a href="/Reserva/Nueva" class="btn btn-outline-primary">Reservar</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="hotel-card">
+                        <img src="~/Content/Imagenes/hotel3.jpg" alt="Hotel frente al mar">
+                        <div class="card-body">
+                            <div class="hotel-location">Cartagena, Colombia</div>
+                            <h5 class="fw-bold">Ocean View Suites</h5>
+                            <p class="text-muted">
+                                Una estancia frente al mar con espacios exclusivos y atención personalizada.
+                            </p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="hotel-price">Desde $140 / noche</span>
+                                <a href="/Reserva/Nueva" class="btn btn-outline-primary">Reservar</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-space pt-0">
+        <div class="container">
+            <div class="section-title">
+                <h2>¿Por qué elegir Casa Blanca?</h2>
+                <p>Te ofrecemos una experiencia de reserva moderna, confiable y rápida.</p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="benefit-card">
+                        <div class="benefit-icon">✓</div>
+                        <h5 class="fw-bold">Reserva segura</h5>
+                        <p class="text-muted mb-0">
+                            Solicita tu reserva con un proceso simple, claro y confiable.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="benefit-card">
+                        <div class="benefit-icon">★</div>
+                        <h5 class="fw-bold">Opciones seleccionadas</h5>
+                        <p class="text-muted mb-0">
+                            Trabajamos con hoteles atractivos para vacaciones, trabajo o escapadas.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="benefit-card">
+                        <div class="benefit-icon">24</div>
+                        <h5 class="fw-bold">Atención continua</h5>
+                        <p class="text-muted mb-0">
+                            Estamos disponibles para orientarte antes y después de tu reserva.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-space pt-0 pb-5">
+        <div class="container">
+            <div class="promo-section">
+                <div class="row align-items-center g-4">
+                    <div class="col-lg-8">
+                        <h2>Empieza a planear tu próxima estancia hoy</h2>
+                        <p>
+                            Encuentra el hotel perfecto, compara opciones y realiza tu reserva en pocos pasos.
+                        </p>
+                    </div>
+                    <div class="col-lg-4 text-lg-end">
+                        <a href="/Reserva/Nueva" class="btn btn-light btn-lg px-4 text-primary fw-bold">Reservar ahora</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>

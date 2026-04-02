@@ -1,0 +1,102 @@
+﻿@model List<CasaBlanca.Models.Reserva>
+
+@{
+    ViewBag.Title = "Reservas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container py-5">
+    <div class="page-shell p-4 p-md-5">
+        <h2 class="fw-bold mb-4 page-title-light">Reservas realizadas</h2>
+
+        @if (TempData["MensajeExito"] != null)
+        {
+            <div class="alert alert-success">
+                @TempData["MensajeExito"]
+            </div>
+        }
+
+        @if (TempData["MensajeError"] != null)
+        {
+            <div class="alert alert-danger">
+                @TempData["MensajeError"]
+            </div>
+        }
+
+        <div class="card shadow border-0 rounded-4">
+            <div class="card-body table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Usuario</th>
+                            <th>Correo</th>
+                            <th>Hotel</th>
+                            <th>Entrada</th>
+                            <th>Salida</th>
+                            <th>Huéspedes</th>
+                            <th>Precio/Noche</th>
+                            <th>Noches</th>
+                            <th>Total</th>
+                            <th>Estado</th>
+                            <th style="min-width: 260px;">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var r in Model)
+                        {
+                            <tr>
+                                <td>@r.IdReserva</td>
+                                <td>@r.NombreUsuario</td>
+                                <td>@r.CorreoUsuario</td>
+                                <td>
+                                    <div class="d-flex align-items-center gap-3">
+                                        @if (!string.IsNullOrEmpty(r.ImagenHotel))
+                                        {
+                                            <img src="~/Content/Imagenes/@r.ImagenHotel"
+                                                 alt="@r.NombreHotel"
+                                                 style="width:70px; height:55px; object-fit:cover; border-radius:10px;" />
+                                        }
+                                        <div>
+                                            <div class="fw-bold">@r.NombreHotel</div>
+                                            <div class="text-muted small">@r.Destino</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>@(r.Entrada.HasValue ? r.Entrada.Value.ToString("dd/MM/yyyy") : "")</td>
+                                <td>@(r.Salida.HasValue ? r.Salida.Value.ToString("dd/MM/yyyy") : "")</td>
+                                <td>@r.Huespedes</td>
+                                <td>$@r.PrecioPorNoche.ToString("N2")</td>
+                                <td>@r.Noches</td>
+                                <td>$@r.Total.ToString("N2")</td>
+                                <td>
+                                    <span class="badge @(r.Estado == "Confirmada" ? "bg-success" : r.Estado == "Cancelada" ? "bg-danger" : "bg-warning text-dark")">
+                                        @r.Estado
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="d-flex flex-column gap-2">
+                                        <form method="post" action="/Admin/CambiarEstado" class="d-flex gap-2">
+                                            <input type="hidden" name="idReserva" value="@r.IdReserva" />
+                                            <select name="estado" class="form-select form-select-sm">
+                                                <option value="Pendiente" @(r.Estado == "Pendiente" ? "selected" : "")>Pendiente</option>
+                                                <option value="Confirmada" @(r.Estado == "Confirmada" ? "selected" : "")>Confirmada</option>
+                                                <option value="Cancelada" @(r.Estado == "Cancelada" ? "selected" : "")>Cancelada</option>
+                                            </select>
+                                            <button type="submit" class="btn btn-sm btn-primary">Guardar</button>
+                                        </form>
+
+                                        <form method="post" action="/Admin/EliminarReserva" onsubmit="return confirm('¿Seguro que deseas eliminar esta reserva?');">
+                                            <input type="hidden" name="idReserva" value="@r.IdReserva" />
+                                            <button type="submit" class="btn btn-sm btn-danger w-100">Eliminar</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

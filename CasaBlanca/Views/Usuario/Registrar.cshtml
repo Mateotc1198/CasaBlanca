@@ -1,0 +1,64 @@
+﻿@{
+    ViewBag.Title = "Registro de Usuario";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white text-center">
+                    <h4>Registro de Usuario</h4>
+                </div>
+                <div class="card-body">
+                    @if (!string.IsNullOrEmpty(ViewBag.Mensaje))
+                    {
+                        <div class="alert alert-info">@ViewBag.Mensaje</div>
+                    }
+
+                    @if (!string.IsNullOrEmpty(ViewBag.MensajeError))
+                    {
+                        <div class="alert alert-danger">@ViewBag.MensajeError</div>
+                    }
+
+                    <form method="post" action="/Usuario/Registrar">
+                        <div class="mb-3">
+                            <label class="form-label">Nombre</label>
+                            <input type="text" name="Nombre" class="form-control" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Apellido</label>
+                            <input type="text" name="Apellido" class="form-control" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Correo</label>
+                            <input type="email" name="Correo" class="form-control" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Teléfono</label>
+                            <input type="text" name="Telefono" class="form-control" required pattern="[0-9]{7,15}"
+                                   title="Ingresa solo números, entre 7 y 15 dígitos" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Usuario</label>
+                            <input type="text" name="User" class="form-control" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Contraseña</label>
+                            <input type="password" name="Clave" class="form-control" required />
+                        </div>
+
+                        <button type="submit" class="btn btn-success w-100">Registrarse</button>
+                        <a href="/Usuario/Login" class="btn btn-link mt-2 w-100 text-center">¿Ya tienes cuenta? Iniciar sesión</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

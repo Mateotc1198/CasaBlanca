@@ -1,0 +1,227 @@
+﻿@model CasaBlanca.Models.Reserva
+@using CasaBlanca.Models
+
+@{
+    ViewBag.Title = "Nueva Reserva";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var hoteles = ViewBag.Hoteles as List<Hotel>;
+}
+
+<div class="container py-5">
+    <div class="page-shell p-4 p-md-5">
+        <h2 class="fw-bold mb-4 page-title-light">Completa tu reserva</h2>
+
+        <div class="card shadow-lg border-0 rounded-4">
+            <div class="card-body p-4 p-md-5">
+
+                @if (ViewBag.Mensaje != null)
+                {
+                    <div class="alert alert-success">@ViewBag.Mensaje</div>
+                }
+
+                @if (ViewBag.MensajeError != null)
+                {
+                    <div class="alert alert-danger">@ViewBag.MensajeError</div>
+                }
+
+                @using (Html.BeginForm("Guardar", "Reserva", FormMethod.Post, new { id = "formReserva" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    @Html.HiddenFor(m => m.NombreHotel, new { id = "NombreHotel" })
+                    @Html.HiddenFor(m => m.Destino, new { id = "Destino" })
+                    @Html.HiddenFor(m => m.PrecioPorNoche, new { id = "PrecioPorNoche" })
+                    @Html.HiddenFor(m => m.Noches, new { id = "Noches" })
+                    @Html.HiddenFor(m => m.Total, new { id = "Total" })
+                    @Html.HiddenFor(m => m.ImagenHotel, new { id = "ImagenHotel" })
+
+                    <div class="mb-3">
+                        <label class="form-label">Hotel</label>
+                        <select id="IdHotel" name="IdHotel" class="form-select form-select-lg">
+                            <option value="">Seleccione un hotel</option>
+                            @if (hoteles != null)
+                            {
+                                foreach (var h in hoteles)
+                                {
+                                    var seleccionado = Model.IdHotel == h.IdHotel ? "selected=\"selected\"" : "";
+                                    <option value="@h.IdHotel"
+                                            data-nombre="@h.Nombre"
+                                            data-ciudad="@h.Ciudad"
+                                            data-precio="@h.PrecioPorNoche.ToString(System.Globalization.CultureInfo.InvariantCulture)"
+                                            data-imagen="@h.Imagen"
+                                            @Html.Raw(seleccionado)>
+                                        @h.Nombre - @h.Ciudad ($@h.PrecioPorNoche por noche)
+                                    </option>
+                                }
+                            }
+                        </select>
+                        @Html.ValidationMessageFor(m => m.IdHotel, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Fecha de entrada</label>
+                            @Html.TextBoxFor(m => m.Entrada, "{0:yyyy-MM-dd}", new { @class = "form-control form-control-lg", type = "date", id = "Entrada" })
+                            @Html.ValidationMessageFor(m => m.Entrada, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Fecha de salida</label>
+                            @Html.TextBoxFor(m => m.Salida, "{0:yyyy-MM-dd}", new { @class = "form-control form-control-lg", type = "date", id = "Salida" })
+                            @Html.ValidationMessageFor(m => m.Salida, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Huéspedes</label>
+                        @Html.DropDownListFor(
+                            m => m.Huespedes,
+                            new List<SelectListItem>
+                            {
+                                new SelectListItem { Text = "1 persona", Value = "1" },
+                                new SelectListItem { Text = "2 personas", Value = "2" },
+                                new SelectListItem { Text = "3 personas", Value = "3" },
+                                new SelectListItem { Text = "4 personas", Value = "4" }
+                            },
+                            "Seleccione",
+                            new { @class = "form-select form-select-lg", id = "Huespedes" }
+                        )
+                        @Html.ValidationMessageFor(m => m.Huespedes, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="mt-3 d-flex gap-3">
+                        <button type="button" class="btn btn-outline-primary btn-lg" onclick="calcularReserva()">
+                            Calcular total
+                        </button>
+                    </div>
+                    if (!string.IsNullOrEmpty(Model.ImagenHotel))
+                    {
+                        <div class="card border-0 rounded-4 overflow-hidden mt-4 shadow-sm">
+                            <img id="imagenHotelPreview"
+                                 src="~/Content/Imagenes/@Model.ImagenHotel"
+                                 alt="@Model.NombreHotel"
+                                 style="width:100%; height:280px; object-fit:cover;" />
+                            <div class="card-body bg-white">
+                                <h5 class="fw-bold mb-1" id="tituloHotelPreview">@Model.NombreHotel</h5>
+                                <p class="text-muted mb-0" id="ciudadHotelPreview">@Model.Destino</p>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="card border-0 rounded-4 overflow-hidden mt-4 shadow-sm" id="hotelPreviewCard" style="display:none;">
+                            <img id="imagenHotelPreview"
+                                 src=""
+                                 alt="Hotel"
+                                 style="width:100%; height:280px; object-fit:cover;" />
+                            <div class="card-body bg-white">
+                                <h5 class="fw-bold mb-1" id="tituloHotelPreview"></h5>
+                                <p class="text-muted mb-0" id="ciudadHotelPreview"></p>
+                            </div>
+                        </div>
+                    }
+
+                    <div class="card bg-light border-0 rounded-4 mt-4">
+                        <div class="card-body">
+                            <h5 class="fw-bold">Resumen antes de confirmar</h5>
+                            <p class="mb-1"><strong>Hotel:</strong> <span id="resumenHotel">@Model.NombreHotel</span></p>
+                            <p class="mb-1"><strong>Ciudad:</strong> <span id="resumenCiudad">@Model.Destino</span></p>
+                            <p class="mb-1"><strong>Precio por noche:</strong> $<span id="resumenPrecio">@Model.PrecioPorNoche.ToString("N2")</span></p>
+                            <p class="mb-1"><strong>Noches:</strong> <span id="resumenNoches">@Model.Noches</span></p>
+                            <p class="mb-0"><strong>Total estimado:</strong> $<span id="resumenTotal">@Model.Total.ToString("N2")</span></p>
+
+                            <p class="mt-3 mb-0 text-success fw-bold">
+                                Este será el valor a pagar al confirmar la reserva.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 d-flex gap-3">
+                        <button type="submit" class="btn btn-primary btn-lg px-4">Confirmar reserva</button>
+                        <a href="/" class="btn btn-outline-secondary btn-lg px-4">Volver</a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function calcularReserva() {
+            var hotelSelect = document.getElementById("IdHotel");
+            var entradaInput = document.getElementById("Entrada");
+            var salidaInput = document.getElementById("Salida");
+
+            var resumenHotel = document.getElementById("resumenHotel");
+            var resumenCiudad = document.getElementById("resumenCiudad");
+            var resumenPrecio = document.getElementById("resumenPrecio");
+            var resumenNoches = document.getElementById("resumenNoches");
+            var resumenTotal = document.getElementById("resumenTotal");
+
+            var hiddenNombreHotel = document.getElementById("NombreHotel");
+            var hiddenDestino = document.getElementById("Destino");
+            var hiddenPrecio = document.getElementById("PrecioPorNoche");
+            var hiddenNoches = document.getElementById("Noches");
+            var hiddenTotal = document.getElementById("Total");
+            var hiddenImagenHotel = document.getElementById("ImagenHotel");
+
+            var previewCard = document.getElementById("hotelPreviewCard");
+            var previewImg = document.getElementById("imagenHotelPreview");
+            var previewTitulo = document.getElementById("tituloHotelPreview");
+            var previewCiudad = document.getElementById("ciudadHotelPreview");
+
+            var option = hotelSelect.options[hotelSelect.selectedIndex];
+
+            if (!option || option.value === "") {
+                alert("Selecciona un hotel.");
+                return;
+            }
+
+            if (!entradaInput.value || !salidaInput.value) {
+                alert("Selecciona la fecha de entrada y de salida.");
+                return;
+            }
+
+            var nombre = option.getAttribute("data-nombre") || "";
+            var ciudad = option.getAttribute("data-ciudad") || "";
+            var precio = parseFloat(option.getAttribute("data-precio")) || 0;
+            var imagen = option.getAttribute("data-imagen") || "";
+
+            var fechaEntrada = new Date(entradaInput.value + "T00:00:00");
+            var fechaSalida = new Date(salidaInput.value + "T00:00:00");
+
+            var noches = (fechaSalida - fechaEntrada) / (1000 * 60 * 60 * 24);
+
+            if (noches <= 0) {
+                alert("La fecha de salida debe ser mayor que la fecha de entrada.");
+                return;
+            }
+
+            var total = precio * noches;
+
+            resumenHotel.textContent = nombre;
+            resumenCiudad.textContent = ciudad;
+            resumenPrecio.textContent = precio.toLocaleString("es-CO", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            resumenNoches.textContent = noches;
+            resumenTotal.textContent = total.toLocaleString("es-CO", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+            hiddenNombreHotel.value = nombre;
+            hiddenDestino.value = ciudad;
+            hiddenPrecio.value = precio;
+            hiddenNoches.value = noches;
+            hiddenTotal.value = total;
+            hiddenImagenHotel.value = imagen;
+
+            if (previewImg && previewTitulo && previewCiudad) {
+                previewImg.src = "/Content/Imagenes/" + imagen;
+                previewTitulo.textContent = nombre;
+                previewCiudad.textContent = ciudad;
+            }
+
+            if (previewCard) {
+                previewCard.style.display = "block";
+            }
+        }
+    </script>
+}

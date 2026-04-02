@@ -1,0 +1,273 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <style>
+        html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100%;
+    background:
+        linear-gradient(rgba(15, 23, 42, 0.72), rgba(15, 23, 42, 0.72)),
+        url('@Url.Content("~/Content/Imagenes/hotel2.jpg")') no-repeat center center fixed;
+    background-size: cover;
+}
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .site-navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(15, 23, 42, 0.35);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+            .site-navbar.scrolled {
+                background: rgba(15, 23, 42, 0.88);
+                box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+            }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: white !important;
+            letter-spacing: 0.4px;
+        }
+
+        .brand-logo {
+            width: 42px;
+            height: 42px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.65);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.18);
+        }
+
+        .navbar-nav .nav-link {
+            color: rgba(255,255,255,0.88) !important;
+            font-weight: 500;
+            margin-left: 10px;
+            position: relative;
+            transition: color 0.25s ease;
+        }
+
+            .navbar-nav .nav-link:hover {
+                color: #ffffff !important;
+            }
+
+            .navbar-nav .nav-link::after {
+                content: "";
+                position: absolute;
+                left: 8px;
+                right: 8px;
+                bottom: 2px;
+                height: 2px;
+                background: white;
+                transform: scaleX(0);
+                transform-origin: center;
+                transition: transform 0.25s ease;
+            }
+
+            .navbar-nav .nav-link:hover::after,
+            .navbar-nav .nav-link.active::after {
+                transform: scaleX(1);
+            }
+
+            .navbar-nav .nav-link.active {
+                color: #ffffff !important;
+            }
+
+        .btn-login {
+            border-radius: 30px;
+            padding: 8px 18px;
+            font-weight: 600;
+            margin-left: 12px;
+            border: 1px solid rgba(255,255,255,0.5);
+            color: white !important;
+        }
+
+            .btn-login:hover {
+                background: rgba(255,255,255,0.12);
+            }
+
+        .btn-reserva {
+            border-radius: 30px;
+            padding: 8px 18px;
+            font-weight: 700;
+            margin-left: 12px;
+            background: white;
+            color: #0d6efd !important;
+            border: none;
+            box-shadow: 0 8px 20px rgba(13, 110, 253, 0.22);
+        }
+
+            .btn-reserva:hover {
+                background: #f1f5f9;
+            }
+
+        .main-content {
+            width: 100%;
+            flex: 1;
+            min-height: 100vh;
+            padding-top: 90px;
+        }
+
+        .custom-footer {
+            background: #0f172a;
+            color: white;
+            text-align: center;
+            padding: 24px 15px;
+        }
+
+            .custom-footer p {
+                margin: 0;
+                color: rgba(255,255,255,0.84);
+            }
+
+        @@media (max-width: 991px) {
+            .site-navbar {
+                background: rgba(15, 23, 42, 0.92);
+            }
+
+            .navbar-collapse {
+                margin-top: 12px;
+                padding: 14px;
+                border-radius: 16px;
+                background: rgba(15, 23, 42, 0.95);
+            }
+
+            .navbar-nav .nav-link {
+                margin-left: 0;
+                padding: 10px 0;
+            }
+
+            .btn-login,
+            .btn-reserva {
+                margin-left: 0;
+                margin-top: 10px;
+                display: inline-block;
+                text-align: center;
+            }
+        }
+        .page-shell {
+            background: rgba(255, 255, 255, 0.10);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.22);
+        }
+
+        .page-title-light {
+            color: white;
+        }
+
+        .page-text-light {
+            color: rgba(255,255,255,0.85);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark site-navbar" id="mainNavbar">
+        <div class="container-fluid px-3 px-lg-4">
+            <a class="navbar-brand" href="/">
+                <img src="~/Content/Imagenes/logo.jpg" alt="Casa Blanca" class="brand-logo" />
+                <span>Casa Blanca</span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Hotel/Lista">Hoteles</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Home/Nosotros">Nosotros</a>
+                    </li>
+
+                    @if (Session["User"] != null)
+                    {
+                        <li class="nav-item">
+                            <span class="nav-link">Hola, @Session["User"]</span>
+                        </li>
+
+                        if (Session["EsAdmin"] != null && (bool)Session["EsAdmin"])
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Admin">Panel Admin</a>
+                            </li>
+                        }
+
+                        <li class="nav-item">
+                            <a class="btn btn-login" href="/Usuario/CerrarSesion">Cerrar sesión</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="btn btn-login" href="/Usuario/Login">Iniciar sesión</a>
+                        </li>
+                    }
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Reserva/MisReservas">Mis reservas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-reserva" href="/Reserva/Nueva">Reservar ahora</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        @RenderBody()
+    </main>
+
+    <footer class="custom-footer">
+        <p>© 2025 Casa Blanca Hotel Agency. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    @RenderSection("Scripts", required: false)
+
+    <script>
+        window.addEventListener('scroll', function () {
+            var navbar = document.getElementById('mainNavbar');
+            if (window.scrollY > 30) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+    </script>
+</body>
+</html>
+
+

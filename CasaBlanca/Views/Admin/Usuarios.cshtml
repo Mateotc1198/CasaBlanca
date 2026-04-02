@@ -1,0 +1,70 @@
+﻿@model List<CasaBlanca.Models.Usuario>
+
+@{
+    ViewBag.Title = "Usuarios";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container py-5 mt-5">
+    <h2 class="text-primary fw-bold mb-4">Usuarios registrados</h2>
+
+    @if (TempData["MensajeExito"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["MensajeExito"]
+        </div>
+    }
+
+    @if (TempData["MensajeError"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["MensajeError"]
+        </div>
+    }
+
+    <div class="card shadow border-0 rounded-4">
+        <div class="card-body table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Correo</th>
+                        <th>Teléfono</th>
+                        <th>Usuario</th>
+                        <th>Admin</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var u in Model)
+                    {
+                        <tr>
+                            <td>@u.IdUsuario</td>
+                            <td>@u.Nombre</td>
+                            <td>@u.Apellido</td>
+                            <td>@u.Correo</td>
+                            <td>@u.Telefono</td>
+                            <td>@u.User</td>
+                            <td>@(u.EsAdmin ? "Sí" : "No")</td>
+                            <td>
+                                @if (Session["IdUsuario"] != null && u.IdUsuario == Convert.ToInt32(Session["IdUsuario"]))
+                                {
+                                    <span class="badge bg-secondary">Tu cuenta</span>
+                                }
+                                else
+                                {
+                                    <form method="post" action="/Admin/EliminarUsuario" onsubmit="return confirm('¿Seguro que deseas eliminar este usuario?');">
+                                        <input type="hidden" name="idUsuario" value="@u.IdUsuario" />
+                                        <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                                    </form>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
