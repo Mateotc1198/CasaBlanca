@@ -8,13 +8,13 @@ Casa Blanca fue construida como una plataforma de reservas con enfoque academico
 
 ### Funcionalidades principales
 
-- Registro de usuarios con validaciones.
-- Inicio y cierre de sesion.
-- Catalogo de hoteles activos.
-- Creacion y consulta de reservas.
-- Cancelacion de reservas pendientes por parte del usuario.
-- Dashboard administrativo con metricas basicas.
-- Creacion y edicion de hoteles desde el panel admin.
+- Registro de usuarios con validaciones
+- Inicio y cierre de sesion
+- Catalogo de hoteles activos
+- Creacion y consulta de reservas
+- Cancelacion de reservas pendientes por parte del usuario
+- Dashboard administrativo con metricas basicas
+- Creacion y edicion de hoteles desde el panel admin
 
 ## Stack tecnologico
 
@@ -25,11 +25,37 @@ Casa Blanca fue construida como una plataforma de reservas con enfoque academico
 - ADO.NET
 - Bootstrap 5
 
+## Screenshots
+
+### Home
+![Home](assets/screenshots/home.png)
+
+### Login
+![Login](assets/screenshots/login.png)
+
+### Register
+![Register](assets/screenshots/register.png)
+
+### Hotels
+![Hotels](assets/screenshots/hotels.png)
+
+### New Booking
+![New Booking](assets/screenshots/booking.png)
+
+### My Bookings
+![My Bookings](assets/screenshots/my-bookings.png)
+
+### Admin Dashboard
+![Admin Dashboard](assets/screenshots/admin-dashboard.png)
+
+### Admin Hotels
+![Admin Hotels](assets/screenshots/admin-hotels.png)
+
 ## Estructura del repositorio
 
-- `CasaBlanca.sln`: solucion principal.
-- `CasaBlanca/`: proyecto web ASP.NET MVC.
-- `CasaBlanca/docs/`: documentacion tecnica y material para portafolio.
+- `CasaBlanca.sln`: solucion principal
+- `CasaBlanca/`: proyecto web ASP.NET MVC
+- `CasaBlanca/docs/`: documentacion tecnica y material para portafolio
 
 ## Documentacion
 
@@ -40,11 +66,11 @@ Casa Blanca fue construida como una plataforma de reservas con enfoque academico
 
 ## Como ejecutarlo en local
 
-1. Abrir `CasaBlanca.sln` en Visual Studio.
-2. Restaurar paquetes NuGet.
-3. Ejecutar el script `CasaBlanca/docs/database/CasaBlanca.portfolio.sql` en SQL Server.
-4. Revisar la cadena de conexion en `CasaBlanca/Web.config`.
-5. Ejecutar el proyecto con IIS Express.
+1. Abrir `CasaBlanca.sln` en Visual Studio
+2. Restaurar paquetes NuGet
+3. Ejecutar el script `CasaBlanca/docs/database/CasaBlanca.portfolio.sql` en SQL Server
+4. Revisar la cadena de conexion en `CasaBlanca/Web.config`
+5. Ejecutar el proyecto con IIS Express
 
 ## Credenciales de prueba
 
@@ -57,8 +83,8 @@ El flujo principal esta funcional para portafolio y demo local: autenticacion, l
 
 ## Mejoras futuras
 
-- Completar la administracion total de usuarios y reservas.
-- Mejorar la estrategia de autenticacion para un entorno productivo.
-- Incorporar pruebas automatizadas.
-- Preparar configuraciones por entorno para despliegue.
+- Completar la administracion total de usuarios y reservas
+- Mejorar la estrategia de autenticacion para un entorno productivo
+- Incorporar pruebas automatizadas
+- Preparar configuraciones por entorno para despliegue
 
